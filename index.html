@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fork & Flame 🔥</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: sans-serif;
+            color: white;
+            background-color: #000; /* Fallback for browsers that don't support video */
+            overflow-x: hidden; /* Prevent horizontal scrollbar */
+        }
+
+        #fire-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* object-fit: cover; */ /* Not applicable for iframe, aspect ratio handled by YouTube player */
+            border: none; /* Remove iframe border */
+            z-index: -1; /* Place it behind other content */
+            pointer-events: none; /* Allow clicks to pass through to elements behind it */
+        }
+
+        nav {
+            position: fixed; /* Make the navbar sticky */
+            top: 0;
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
+            padding: 15px 0;
+            text-align: center;
+            z-index: 1000; /* Ensure it's above the background */
+            transition: background-color 0.3s ease;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 14px 20px;
+            margin: 0 10px;
+            font-size: 1.2em;
+            transition: color 0.3s ease, background-color 0.3s ease;
+        }
+
+        nav a:hover {
+            background-color: #ff4500; /* OrangeRed on hover */
+            color: black;
+        }
+
+        .section {
+            padding: 100px 20px 20px; /* Add padding to avoid overlap with fixed nav */
+            min-height: 80vh; /* Make sections take up most of the viewport height */
+            text-align: center;
+            position: relative; /* For potential future content positioning */
+            background-color: rgba(0,0,0,0.5); /* Slight dark overlay for readability */
+            margin-bottom: 20px; /* Space between sections */
+        }
+        .section:last-child {
+            margin-bottom: 0;
+        }
+
+        #home h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+
+        #home p {
+            font-size: 1.5em;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        #menu img {
+            max-width: 90%;
+            height: auto;
+            border: 5px solid #ff4500;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        #video .video-placeholder {
+            width: 80%;
+            max-width: 600px;
+            height: 400px;
+            background-color: #333;
+            border: 2px dashed #ff4500;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px auto;
+            color: #aaa;
+            font-size: 1.2em;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: #aaa;
+            font-size: 0.9em;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        body.menu-fullscreen #menu.section {
+            padding-top: 20px; 
+            padding-bottom: 20px;
+            min-height: calc(100vh - 40px); /* Account for top/bottom padding */
+            background-color: rgba(0,0,0,0.85); /* Slightly more opaque background for focus */
+        }
+        body.menu-fullscreen #menu.section img#menuImageElement {
+            max-height: calc(100vh - 60px); /* Adjust to ensure it fits well with padding */
+            object-fit: contain;
+            cursor: default; /* Indicate it's not clickable to another state from here */
+            border-width: 3px; /* Thinner border in fullscreen */
+        }
+    </style>
+</head>
+<body>
+
+    <iframe id="fire-background" 
+            src="https://www.youtube.com/embed/8FeCmr1jAf4?autoplay=1&mute=1&loop=1&playlist=8FeCmr1jAf4&controls=0&showinfo=0&autohide=1&modestbranding=1&iv_load_policy=3&rel=0"
+            frameborder="0" 
+            allow="autoplay; encrypted-media">
+    </iframe>
+
+    <nav id="navbar">
+        <a href="#home">Home</a>
+        <a href="#menu">Menu</a>
+    </nav>
+
+    <div id="home" class="section">
+        <h1>Welcome to Fork & Flame 🔥</h1>
+        <p>Experience the passion in every dish. At Fork & Flame, we believe in using the freshest ingredients, crafting innovative recipes, and delivering an unforgettable culinary journey. Our chefs pour their hearts into creating flavors that ignite your senses. Come taste the difference dedication makes!</p>
+    </div>
+
+
+    <div id="menu" class="section">
+        <h2>Our Delicious Offerings</h2>
+        <img src="BUSSNISS.png" alt="Fork & Flame Menu" id="menuImageElement" style="cursor: pointer;">
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Fork & Flame 🔥. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        const allSections = document.querySelectorAll('.section');
+        const siteFooter = document.querySelector('footer');
+        const navBar = document.getElementById('navbar');
+        const menuImage = document.getElementById('menuImageElement');
+        const bodyElement = document.body;
+
+        function displayView(targetSectionId) {
+            bodyElement.classList.remove('menu-fullscreen');
+            allSections.forEach(sec => sec.classList.add('hidden'));
+            if (siteFooter) siteFooter.classList.add('hidden');
+
+            if (navBar) navBar.classList.remove('hidden');
+
+            const sectionToShow = document.getElementById(targetSectionId);
+
+            if (sectionToShow) {
+                sectionToShow.classList.remove('hidden');
+                // Show footer only for 'home' or 'menu' (when menu is not fullscreen)
+                if (targetSectionId === 'home' || (targetSectionId === 'menu' && !bodyElement.classList.contains('menu-fullscreen'))) {
+                    if (siteFooter) siteFooter.classList.remove('hidden');
+                }
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function displayMenuFullScreen() {
+            bodyElement.classList.add('menu-fullscreen');
+            allSections.forEach(sec => sec.classList.add('hidden'));
+            if (siteFooter) siteFooter.classList.add('hidden');
+            // if (navBar) navBar.classList.add('hidden'); // Keep navbar visible
+            if (navBar) navBar.classList.remove('hidden'); // Ensure navbar is visible
+
+            const menuSectionOnly = document.getElementById('menu');
+            if (menuSectionOnly) {
+                menuSectionOnly.classList.remove('hidden');
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            displayView('home'); // Show home section by default
+        });
+
+        document.querySelectorAll('nav a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                displayView(targetId);
+            });
+        });
+
+        if (menuImage) {
+            menuImage.addEventListener('click', function() {
+                if (!bodyElement.classList.contains('menu-fullscreen')) {
+                    displayMenuFullScreen();
+                }
+            });
+        }
+
+        window.addEventListener('scroll', function() {
+            if (navBar && !navBar.classList.contains('hidden')) {
+                if (window.scrollY > 50) {
+                    navBar.style.backgroundColor = 'rgba(0, 0, 0, 0.9)';
+                } else {
+                    navBar.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>
